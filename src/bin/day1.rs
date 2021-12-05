@@ -53,7 +53,7 @@ fn calculate_window_increases(measurements: &[u32]) -> u32 {
 }
 
 #[cfg(test)]
-mod tests {
+mod day1_tests {
     use super::*;
     mod test_calculate_num_increases {
         use super::*;
