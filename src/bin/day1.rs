@@ -1,7 +1,7 @@
 use std::{fs::File, io::{BufReader, BufRead}};
 
 fn main() -> std::io::Result<()> {
-    let input_file = File::open("./src/input.txt")?;
+    let input_file = File::open("./data/day1.txt")?;
     let reader = BufReader::new(input_file);
 
     let measurements: Vec<u32> = reader.lines()
