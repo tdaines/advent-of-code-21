@@ -20,14 +20,14 @@ fn calculate_position_and_depth(planned_course: &[String]) -> (u32, u32) {
     let mut aim: u32 = 0;
 
     for course in planned_course {
-        if course.starts_with("forward ") {
-            let forward = course["forward ".len()..].parse::<u32>().unwrap();
+        if let Some(value) = course.strip_prefix("forward ") {
+            let forward = value.parse::<u32>().unwrap();
             forward_position += forward;
             depth += forward * aim;
-        } else if course.starts_with("up ") {
-            aim -= course["up ".len()..].parse::<u32>().unwrap();
-        } else if course.starts_with("down ") {
-            aim += course["down ".len()..].parse::<u32>().unwrap();
+        } else if let Some(value) = course.strip_prefix("up ") {
+            aim -= value.parse::<u32>().unwrap();
+        } else if let Some(value) = course.strip_prefix("down ") {
+            aim += value.parse::<u32>().unwrap();
         }
     }
 
