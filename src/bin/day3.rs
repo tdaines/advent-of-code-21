@@ -1,4 +1,7 @@
-use std::{fs::File, io::{BufReader, BufRead}};
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
 fn main() -> std::io::Result<()> {
     let input_file = File::open("./data/day3.txt")?;
@@ -8,12 +11,18 @@ fn main() -> std::io::Result<()> {
     let (gamma, epsilon) = calculate_gamma_and_epsilon(&report);
 
     let power_comsumption = gamma * epsilon;
-    println!("Gamma: {}, Epsilon: {}, Power Consumption: {}", gamma, epsilon, power_comsumption);
+    println!(
+        "Gamma: {}, Epsilon: {}, Power Consumption: {}",
+        gamma, epsilon, power_comsumption
+    );
 
     let oxygen_generator_rating = calculate_oxygen_generator_rating(report.clone());
     let co2_scrubber_rating = calculate_co2_scrubber_rating(report);
     let life_support_rating = oxygen_generator_rating * co2_scrubber_rating;
-    println!("O2 Rating: {}, CO2 Rating: {}, Life Support Rating: {}", oxygen_generator_rating, co2_scrubber_rating, life_support_rating);
+    println!(
+        "O2 Rating: {}, CO2 Rating: {}, Life Support Rating: {}",
+        oxygen_generator_rating, co2_scrubber_rating, life_support_rating
+    );
 
     Ok(())
 }
@@ -26,7 +35,10 @@ fn calculate_gamma_and_epsilon(report: &[String]) -> (u32, u32) {
     let length = &report[0].len();
 
     for i in 0..*length {
-        let num_zeroes = report.iter().filter(|num| num.as_bytes()[i] == b'0').count();
+        let num_zeroes = report
+            .iter()
+            .filter(|num| num.as_bytes()[i] == b'0')
+            .count();
         if num_zeroes > report.len() / 2 {
             gamma += "0";
             epsilon += "1";
@@ -52,7 +64,10 @@ fn calculate_oxygen_generator_rating(mut report: Vec<String>) -> u32 {
             return oxygen_generator_rating;
         }
 
-        let num_zeroes = report.iter().filter(|num| num.as_bytes()[i] == b'0').count();
+        let num_zeroes = report
+            .iter()
+            .filter(|num| num.as_bytes()[i] == b'0')
+            .count();
         if num_zeroes > report.len() / 2 {
             // Keep only numbers with a '0' at the ith position
             report.retain(|num| num.as_bytes()[i] == b'0');
@@ -80,7 +95,10 @@ fn calculate_co2_scrubber_rating(mut report: Vec<String>) -> u32 {
             return co2_scrubber_rating;
         }
 
-        let num_zeroes = report.iter().filter(|num| num.as_bytes()[i] == b'0').count();
+        let num_zeroes = report
+            .iter()
+            .filter(|num| num.as_bytes()[i] == b'0')
+            .count();
         if num_zeroes > report.len() / 2 {
             // Keep only numbers with a '1' at the ith position
             report.retain(|num| num.as_bytes()[i] == b'1');

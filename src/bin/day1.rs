@@ -1,15 +1,25 @@
-use std::{fs::File, io::{BufReader, BufRead}};
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
 fn main() -> std::io::Result<()> {
     let input_file = File::open("./data/day1.txt")?;
     let reader = BufReader::new(input_file);
 
-    let measurements: Vec<u32> = reader.lines()
+    let measurements: Vec<u32> = reader
+        .lines()
         .map(|depth| depth.unwrap().parse().unwrap())
         .collect();
 
-    println!("Num increases =        {}", calculate_num_increases(&measurements));
-    println!("Num window increases = {}", calculate_window_increases(&measurements));
+    println!(
+        "Num increases =        {}",
+        calculate_num_increases(&measurements)
+    );
+    println!(
+        "Num window increases = {}",
+        calculate_window_increases(&measurements)
+    );
     Ok(())
 }
 

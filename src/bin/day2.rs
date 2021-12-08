@@ -1,16 +1,22 @@
-use std::{fs::File, io::{BufReader, BufRead}};
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
 fn main() -> std::io::Result<()> {
     let input_file = File::open("./data/day2.txt")?;
     let reader = BufReader::new(input_file);
 
-    let planned_course: Vec<String> = reader.lines()
-        .map(|line| line.unwrap())
-        .collect();
+    let planned_course: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
 
     let (position, depth) = calculate_position_and_depth(&planned_course);
 
-    println!("Position: {}, Depth: {}, P x D = {}", position, depth, position * depth);
+    println!(
+        "Position: {}, Depth: {}, P x D = {}",
+        position,
+        depth,
+        position * depth
+    );
     Ok(())
 }
 
@@ -48,7 +54,7 @@ mod day2_tests {
                 "forward 8".to_owned(),
                 "up 3".to_owned(),
                 "down 8".to_owned(),
-                "forward 2".to_owned()
+                "forward 2".to_owned(),
             ];
 
             assert_eq!(calculate_position_and_depth(&planned_course), (15, 60));
