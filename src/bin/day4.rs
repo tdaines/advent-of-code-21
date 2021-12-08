@@ -108,20 +108,43 @@ fn main() -> std::io::Result<()> {
         boards.push(board);
     }
 
-    for number in draw {
-        for board in &mut boards {
-            board.mark(number);
-            if board.has_bingo() {
-                let sum_unmarked = board.sum_unmarked();
-                println!(
-                    "Sum: {}, Number: {}, SxN: {}",
-                    sum_unmarked,
-                    number,
-                    sum_unmarked * number
-                );
-                return Ok(());
+    let mut winning_boards = Vec::with_capacity(boards.len());
+    for number in &draw {
+        for board in boards.iter_mut() {
+            board.mark(*number);
+        }
+
+        let mut i = 0;
+        while i < boards.len() {
+            if boards[i].has_bingo() {
+                let board = boards.remove(i);
+                winning_boards.push((board, *number));
+            } else {
+                i += 1;
             }
         }
+    }
+
+    if let Some(winner) = winning_boards.first() {
+        let sum_unmarked = winner.0.sum_unmarked();
+        println!("First Winner");
+        println!(
+            "Sum: {}, Number: {}, SxN: {}",
+            sum_unmarked,
+            winner.1,
+            sum_unmarked * winner.1
+        );
+    }
+
+    if let Some(winner) = winning_boards.last() {
+        let sum_unmarked = winner.0.sum_unmarked();
+        println!("Last Winner");
+        println!(
+            "Sum: {}, Number: {}, SxN: {}",
+            sum_unmarked,
+            winner.1,
+            sum_unmarked * winner.1
+        );
     }
 
     Ok(())
