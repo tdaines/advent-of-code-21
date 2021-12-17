@@ -56,8 +56,8 @@ impl LineSegment {
 
         let mut x = self.start.x as isize;
         let mut y = self.start.y as isize;
-        let x_step = if self.end.x > self.start.x { 1 as isize } else { -1 };
-        let y_step = if self.end.y > self.start.y { 1 as isize } else { -1 };
+        let x_step = if self.end.x > self.start.x { 1 } else { -1 };
+        let y_step = if self.end.y > self.start.y { 1 } else { -1 };
 
         let capacity = (self.start.x as isize - self.end.x as isize).abs() as usize + 1;
         let mut points = Vec::with_capacity(capacity);
@@ -121,7 +121,7 @@ fn main() {
     let mut diagram = Diagram::new(width, height);
 
     for line_segment in &line_segments {
-        diagram.add_line_segment(&line_segment, false);
+        diagram.add_line_segment(line_segment, false);
     }
 
     println!(
@@ -132,7 +132,7 @@ fn main() {
     let mut diagram = Diagram::new(width, height);
 
     for line_segment in &line_segments {
-        diagram.add_line_segment(&line_segment, true);
+        diagram.add_line_segment(line_segment, true);
     }
 
     println!(
@@ -150,13 +150,13 @@ fn read_line_segment(line: &str) -> LineSegment {
     let mut points = line.split(" -> ");
 
     let start = points.next().unwrap();
-    let mut parts = start.split(",");
+    let mut parts = start.split(',');
     let x: usize = parts.next().unwrap().parse().unwrap();
     let y: usize = parts.next().unwrap().parse().unwrap();
     let start = Point::new(x, y);
 
     let end = points.next().unwrap();
-    let mut parts = end.split(",");
+    let mut parts = end.split(',');
     let x: usize = parts.next().unwrap().parse().unwrap();
     let y: usize = parts.next().unwrap().parse().unwrap();
     let end = Point::new(x, y);
@@ -164,14 +164,14 @@ fn read_line_segment(line: &str) -> LineSegment {
     LineSegment::new(start, end)
 }
 
-fn get_max_x_coord(line_segments: &Vec<LineSegment>) -> usize {
+fn get_max_x_coord(line_segments: &[LineSegment]) -> usize {
     let max_start_x = line_segments.iter().map(|line| line.start.x).max().unwrap();
     let max_end_x = line_segments.iter().map(|line| line.end.x).max().unwrap();
 
     cmp::max(max_start_x, max_end_x)
 }
 
-fn get_max_y_coord(line_segments: &Vec<LineSegment>) -> usize {
+fn get_max_y_coord(line_segments: &[LineSegment]) -> usize {
     let max_start_y = line_segments.iter().map(|line| line.start.y).max().unwrap();
     let max_end_y = line_segments.iter().map(|line| line.end.y).max().unwrap();
 
