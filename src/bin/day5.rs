@@ -1,7 +1,7 @@
 use std::{
     cmp,
     fs::File,
-    io::{BufRead, BufReader}
+    io::{BufRead, BufReader},
 };
 
 #[derive(Copy, Clone, PartialEq, Debug)]

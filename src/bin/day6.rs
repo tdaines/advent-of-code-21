@@ -1,4 +1,4 @@
-use std::{fs::File, io::Read, collections::VecDeque};
+use std::{collections::VecDeque, fs::File, io::Read};
 
 struct Fish {
     // index into collection is age of fish
@@ -8,7 +8,6 @@ struct Fish {
 
 impl Fish {
     fn new(ages: &[u8]) -> Self {
-
         // length of 9 to account for ages 0 -> 8
         let mut fish_ages = [0_u64; 9];
         for age in ages {
@@ -40,7 +39,6 @@ impl Fish {
 }
 
 fn main() {
-
     let mut input_file = File::open("./data/day6.txt").unwrap();
     let mut input = String::new();
     let _ = input_file.read_to_string(&mut input);
@@ -60,7 +58,9 @@ fn main() {
 
 fn parse_fish_ages(ages: &str) -> Vec<u8> {
     // parse 3,4,3,1,2
-    ages.split(',').map(|age| age.parse::<u8>().unwrap()).collect()
+    ages.split(',')
+        .map(|age| age.parse::<u8>().unwrap())
+        .collect()
 }
 
 #[cfg(test)]
