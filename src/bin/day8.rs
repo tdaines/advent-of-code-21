@@ -1,10 +1,6 @@
 use std::{fs::File, io::{BufReader, BufRead}, collections::HashSet, iter};
 
 fn main() {
-    // let mut input_file = File::open("./data/day8.txt").unwrap();
-    // let mut input = String::new();
-    // let _ = input_file.read_to_string(&mut input);
-
     let input_file = File::open("./data/day8.txt").unwrap();
     let reader = BufReader::new(input_file);
     let lines: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();

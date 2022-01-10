@@ -115,9 +115,6 @@ fn main() {
     let width = get_max_x_coord(&line_segments) + 1;
     let height = get_max_y_coord(&line_segments) + 1;
 
-    // println!("width: {}", width);
-    // println!("height: {}", height);
-
     let mut diagram = Diagram::new(width, height);
 
     for line_segment in &line_segments {
