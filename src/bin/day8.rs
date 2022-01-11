@@ -1,4 +1,9 @@
-use std::{fs::File, io::{BufReader, BufRead}, collections::HashSet, iter};
+use std::{
+    collections::HashSet,
+    fs::File,
+    io::{BufRead, BufReader},
+    iter,
+};
 
 fn main() {
     let input_file = File::open("./data/day8.txt").unwrap();
@@ -36,7 +41,7 @@ fn parse_input_signals_and_output_digits(input: &str) -> (Vec<HashSet<char>>, Ve
     let parts: Vec<&str> = input.split('|').collect();
     let signals = parts[0];
 
-    let mut input_signals = Vec::<HashSet::<char>>::new();
+    let mut input_signals = Vec::<HashSet<char>>::new();
     for signal in signals.split_ascii_whitespace() {
         let mut signal_pattern = HashSet::new();
         for letter in signal.chars() {
@@ -46,7 +51,7 @@ fn parse_input_signals_and_output_digits(input: &str) -> (Vec<HashSet<char>>, Ve
     }
 
     let digits = parts[1];
-    let mut output_digits = Vec::<HashSet::<char>>::new();
+    let mut output_digits = Vec::<HashSet<char>>::new();
     for digit_pattern in digits.split_ascii_whitespace() {
         let mut output = HashSet::new();
         for digit in digit_pattern.chars() {
@@ -59,7 +64,8 @@ fn parse_input_signals_and_output_digits(input: &str) -> (Vec<HashSet<char>>, Ve
 }
 
 fn determine_input_numbers(input: &[HashSet<char>]) -> Vec<HashSet<char>> {
-    let mut numbers: Vec<HashSet<char>> = iter::repeat_with(HashSet::<char>::new).take(10).collect();
+    let mut numbers: Vec<HashSet<char>> =
+        iter::repeat_with(HashSet::<char>::new).take(10).collect();
 
     for some_num in input {
         match some_num.len() {
@@ -67,7 +73,7 @@ fn determine_input_numbers(input: &[HashSet<char>]) -> Vec<HashSet<char>> {
             3 => numbers[7] = some_num.to_owned(),
             4 => numbers[4] = some_num.to_owned(),
             7 => numbers[8] = some_num.to_owned(),
-            _ => ()
+            _ => (),
         };
     }
 
@@ -94,16 +100,20 @@ fn determine_output_number(input: &[HashSet<char>], output_digits: &[HashSet<cha
     let mut number = String::new();
 
     for digit in output_digits {
-        let index = input.iter().position(|input_num| input_num  == digit).unwrap();
+        let index = input
+            .iter()
+            .position(|input_num| input_num == digit)
+            .unwrap();
         number += &index.to_string();
-
     }
 
     number.parse::<usize>().unwrap()
 }
 
 fn is_zero(one: &HashSet<char>, four: &HashSet<char>, some_num: &HashSet<char>) -> bool {
-    some_num.len() == 6 && one.intersection(some_num).count() == one.len() && four.intersection(some_num).count() == 3
+    some_num.len() == 6
+        && one.intersection(some_num).count() == one.len()
+        && four.intersection(some_num).count() == 3
 }
 
 fn is_two(four: &HashSet<char>, some_num: &HashSet<char>) -> bool {
@@ -115,7 +125,9 @@ fn is_three(one: &HashSet<char>, some_num: &HashSet<char>) -> bool {
 }
 
 fn is_five(one: &HashSet<char>, four: &HashSet<char>, some_num: &HashSet<char>) -> bool {
-    some_num.len() == 5 && one.intersection(some_num).count() == 1 && four.intersection(some_num).count() == 3
+    some_num.len() == 5
+        && one.intersection(some_num).count() == 1
+        && four.intersection(some_num).count() == 3
 }
 
 fn is_six(one: &HashSet<char>, some_num: &HashSet<char>) -> bool {
@@ -188,32 +200,55 @@ mod day8_tests {
 
     #[test]
     fn test_determine_input_numbers() {
-        let input = "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf";
+        let input =
+            "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf";
         let (input, _) = parse_input_signals_and_output_digits(input);
 
         let input_numbers = determine_input_numbers(&input);
 
-        assert_eq!("abcdeg",  input_numbers[0].iter().sorted().collect::<String>());
-        assert_eq!("ab",      input_numbers[1].iter().sorted().collect::<String>());
-        assert_eq!("acdfg",   input_numbers[2].iter().sorted().collect::<String>());
-        assert_eq!("abcdf",   input_numbers[3].iter().sorted().collect::<String>());
-        assert_eq!("abef",    input_numbers[4].iter().sorted().collect::<String>());
-        assert_eq!("bcdef",   input_numbers[5].iter().sorted().collect::<String>());
-        assert_eq!("bcdefg",  input_numbers[6].iter().sorted().collect::<String>());
-        assert_eq!("abd",     input_numbers[7].iter().sorted().collect::<String>());
-        assert_eq!("abcdefg", input_numbers[8].iter().sorted().collect::<String>());
-        assert_eq!("abcdef",  input_numbers[9].iter().sorted().collect::<String>());
+        assert_eq!(
+            "abcdeg",
+            input_numbers[0].iter().sorted().collect::<String>()
+        );
+        assert_eq!("ab", input_numbers[1].iter().sorted().collect::<String>());
+        assert_eq!(
+            "acdfg",
+            input_numbers[2].iter().sorted().collect::<String>()
+        );
+        assert_eq!(
+            "abcdf",
+            input_numbers[3].iter().sorted().collect::<String>()
+        );
+        assert_eq!("abef", input_numbers[4].iter().sorted().collect::<String>());
+        assert_eq!(
+            "bcdef",
+            input_numbers[5].iter().sorted().collect::<String>()
+        );
+        assert_eq!(
+            "bcdefg",
+            input_numbers[6].iter().sorted().collect::<String>()
+        );
+        assert_eq!("abd", input_numbers[7].iter().sorted().collect::<String>());
+        assert_eq!(
+            "abcdefg",
+            input_numbers[8].iter().sorted().collect::<String>()
+        );
+        assert_eq!(
+            "abcdef",
+            input_numbers[9].iter().sorted().collect::<String>()
+        );
     }
 
     #[test]
     fn test_determine_output_number() {
-        let input = "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf";
+        let input =
+            "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf";
         let (input, output) = parse_input_signals_and_output_digits(input);
 
         let input_numbers = determine_input_numbers(&input);
         let output_number = determine_output_number(&input_numbers, &output);
 
-        assert_eq!(5353,  output_number);
+        assert_eq!(5353, output_number);
     }
 
     #[test]
