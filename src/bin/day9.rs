@@ -25,7 +25,7 @@ fn main() {
     let lines: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
 
     let height_map = build_height_map(lines);
-    let low_points = find_low_points(&height_map);
+    let low_points = find_low_locations(&height_map);
     let risk_level_sum = sum_risk_levels_of_low_points(&low_points);
 
     println!(
@@ -63,32 +63,6 @@ fn read_height_map_line(line: &str) -> Vec<u8> {
     line.chars()
         .map(|chr| chr.to_digit(10).unwrap() as u8)
         .collect()
-}
-
-fn get_adjacent_heights(height_map: &[Vec<u8>], row: usize, col: usize) -> Vec<u8> {
-    let mut adjacent = Vec::with_capacity(4);
-
-    //above
-    if row > 0 {
-        adjacent.push(height_map[row - 1][col]);
-    }
-
-    //below
-    if row < height_map.len() - 1 {
-        adjacent.push(height_map[row + 1][col]);
-    }
-
-    //left
-    if col > 0 {
-        adjacent.push(height_map[row][col - 1]);
-    }
-
-    //right
-    if col < height_map[0].len() - 1 {
-        adjacent.push(height_map[row][col + 1]);
-    }
-
-    adjacent
 }
 
 fn get_adjacent_locations(height_map: &[Vec<u8>], location: Location) -> Vec<Location> {
@@ -132,22 +106,13 @@ fn is_low_point(height_map: &[Vec<u8>], row: usize, col: usize) -> bool {
         return true;
     }
 
-    let adjacent_heights = get_adjacent_heights(height_map, row, col);
-    height < *adjacent_heights.iter().min().unwrap()
-}
-
-fn find_low_points(height_map: &[Vec<u8>]) -> Vec<u8> {
-    let mut low_points = Vec::new();
-
-    for row in 0..height_map.len() {
-        for col in 0..height_map[row].len() {
-            if is_low_point(height_map, row, col) {
-                low_points.push(height_map[row][col]);
-            }
-        }
-    }
-
-    low_points
+    let adjacent_locations = get_adjacent_locations(height_map, Location::new(row, col, height));
+    height
+        < adjacent_locations
+            .iter()
+            .map(|loc| loc.height)
+            .min()
+            .unwrap()
 }
 
 fn find_low_locations(height_map: &[Vec<u8>]) -> Vec<Location> {
@@ -164,10 +129,10 @@ fn find_low_locations(height_map: &[Vec<u8>]) -> Vec<Location> {
     low_points
 }
 
-fn sum_risk_levels_of_low_points(low_points: &[u8]) -> usize {
+fn sum_risk_levels_of_low_points(low_points: &[Location]) -> usize {
     low_points
         .iter()
-        .map(|low_point| *low_point as usize + 1)
+        .map(|low_point| low_point.height as usize + 1)
         .sum()
 }
 
@@ -228,7 +193,7 @@ mod day9_tests {
     }
 
     #[test]
-    fn test_get_adjacent_heights() {
+    fn test_get_adjacent_locations() {
         let input_file = File::open("./data/sample9.txt").unwrap();
         let reader = BufReader::new(input_file);
         let lines: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
@@ -242,17 +207,25 @@ mod day9_tests {
         */
         let height_map = build_height_map(lines);
 
-        assert_eq!(vec![3, 1], get_adjacent_heights(&height_map, 0, 0));
-        assert_eq!(vec![9, 9, 3], get_adjacent_heights(&height_map, 0, 5));
-        assert_eq!(vec![1, 1], get_adjacent_heights(&height_map, 0, 9));
+        assert_eq!(
+            vec![Location::new(1, 0, 3), Location::new(0, 1, 1)],
+            get_adjacent_locations(&height_map, Location::new(0, 0, 2))
+        );
 
-        assert_eq!(vec![3, 8, 8], get_adjacent_heights(&height_map, 2, 0));
-        assert_eq!(vec![8, 6, 8, 6], get_adjacent_heights(&height_map, 2, 2));
-        assert_eq!(vec![1, 9, 9], get_adjacent_heights(&height_map, 2, 9));
+        assert_eq!(
+            vec![Location::new(1, 5, 9), Location::new(0, 4, 9), Location::new(0, 6, 3)],
+            get_adjacent_locations(&height_map, Location::new(0, 5, 4))
+        );
 
-        assert_eq!(vec![8, 8], get_adjacent_heights(&height_map, 4, 0));
-        assert_eq!(vec![7, 5, 7], get_adjacent_heights(&height_map, 4, 7));
-        assert_eq!(vec![9, 7], get_adjacent_heights(&height_map, 4, 9));
+        assert_eq!(
+            vec![Location::new(1, 9, 1), Location::new(0, 8, 1)],
+            get_adjacent_locations(&height_map, Location::new(0, 9, 0))
+        );
+
+        assert_eq!(
+            vec![Location::new(1, 2, 8), Location::new(3, 2, 6), Location::new(2, 1, 8), Location::new(2, 3, 6)],
+            get_adjacent_locations(&height_map, Location::new(2, 2, 5))
+        );
     }
 
     #[test]
@@ -295,8 +268,8 @@ mod day9_tests {
         9899965678
         */
         let height_map = build_height_map(lines);
-        let low_points = find_low_points(&height_map);
-        assert_eq!(vec![1, 0, 5, 5], low_points);
+        let low_points = find_low_locations(&height_map);
+        assert_eq!(vec![Location::new(0, 1, 1), Location::new(0, 9, 0), Location::new(2, 2, 5), Location::new(4, 6, 5)], low_points);
 
         let sum = sum_risk_levels_of_low_points(&low_points);
         assert_eq!(15, sum);
