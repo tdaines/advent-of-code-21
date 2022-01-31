@@ -1,4 +1,8 @@
-use std::{fs::File, io::{BufReader, BufRead}, collections::VecDeque};
+use std::{
+    collections::VecDeque,
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
 fn main() {
     let input_file = File::open("./data/day10.txt").unwrap();
@@ -11,7 +15,7 @@ fn main() {
     println!("Total syntax error score is {}", score);
 
     let mut autocomplete_scores = get_autocomplete_scores(&results);
-    autocomplete_scores.sort();
+    autocomplete_scores.sort_unstable();
 
     let middle_score = autocomplete_scores[autocomplete_scores.len() / 2];
     println!("Autocomplete middle score is {}", middle_score);
@@ -68,32 +72,32 @@ fn parse_line(line: &str) -> Result<String, char> {
         match token {
             '[' | '(' | '{' | '<' => {
                 token_stack.push_back(token);
-            },
+            }
             ']' => {
                 let top = token_stack.pop_back().unwrap();
                 if top != '[' {
                     return Err(']');
                 }
-            },
+            }
             ')' => {
                 let top = token_stack.pop_back().unwrap();
                 if top != '(' {
                     return Err(')');
                 }
-            },
+            }
             '}' => {
                 let top = token_stack.pop_back().unwrap();
                 if top != '{' {
                     return Err('}');
                 }
-            },
+            }
             '>' => {
                 let top = token_stack.pop_back().unwrap();
                 if top != '<' {
                     return Err('>');
                 }
-            },
-            _ => ()
+            }
+            _ => (),
         }
     }
 
@@ -160,7 +164,8 @@ mod day10_tests {
         let reader = BufReader::new(input_file);
         let lines: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
 
-        let results: Vec<Result<String, char>> = lines.iter().map(|line| parse_line(line)).collect();
+        let results: Vec<Result<String, char>> =
+            lines.iter().map(|line| parse_line(line)).collect();
 
         let score = get_syntax_error_score(&results);
         assert_eq!(26397, score);
@@ -172,7 +177,8 @@ mod day10_tests {
         let reader = BufReader::new(input_file);
         let lines: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
 
-        let results: Vec<Result<String, char>> = lines.iter().map(|line| parse_line(line)).collect();
+        let results: Vec<Result<String, char>> =
+            lines.iter().map(|line| parse_line(line)).collect();
 
         let autocomplete_scores = get_autocomplete_scores(&results);
 

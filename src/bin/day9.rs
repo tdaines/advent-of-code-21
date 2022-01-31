@@ -213,7 +213,11 @@ mod day9_tests {
         );
 
         assert_eq!(
-            vec![Location::new(1, 5, 9), Location::new(0, 4, 9), Location::new(0, 6, 3)],
+            vec![
+                Location::new(1, 5, 9),
+                Location::new(0, 4, 9),
+                Location::new(0, 6, 3)
+            ],
             get_adjacent_locations(&height_map, Location::new(0, 5, 4))
         );
 
@@ -223,7 +227,12 @@ mod day9_tests {
         );
 
         assert_eq!(
-            vec![Location::new(1, 2, 8), Location::new(3, 2, 6), Location::new(2, 1, 8), Location::new(2, 3, 6)],
+            vec![
+                Location::new(1, 2, 8),
+                Location::new(3, 2, 6),
+                Location::new(2, 1, 8),
+                Location::new(2, 3, 6)
+            ],
             get_adjacent_locations(&height_map, Location::new(2, 2, 5))
         );
     }
@@ -269,7 +278,15 @@ mod day9_tests {
         */
         let height_map = build_height_map(lines);
         let low_points = find_low_locations(&height_map);
-        assert_eq!(vec![Location::new(0, 1, 1), Location::new(0, 9, 0), Location::new(2, 2, 5), Location::new(4, 6, 5)], low_points);
+        assert_eq!(
+            vec![
+                Location::new(0, 1, 1),
+                Location::new(0, 9, 0),
+                Location::new(2, 2, 5),
+                Location::new(4, 6, 5)
+            ],
+            low_points
+        );
 
         let sum = sum_risk_levels_of_low_points(&low_points);
         assert_eq!(15, sum);
